@@ -1,0 +1,8 @@
+{
+  "name": "frukostfralla",
+  "version": "0.0.1",
+  "dependencies": {
+    "express": "2.5.8",
+    "jade": "0.21.0"
+  }
+}
