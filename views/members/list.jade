@@ -1,0 +1,19 @@
+
+a(href="/members/new") Registrera
+br
+table(border=1)
+  tr
+    th Förnamn
+    th Efternamn
+    th Epost
+    th Adress
+    th Stad
+    th Postnummer
+  each member in members
+    tr
+    td #{member.firstname}
+    td #{member.lastname}
+    td #{member.email}
+    td #{member.address}
+    td #{member.city}
+    td #{member.postalcode}

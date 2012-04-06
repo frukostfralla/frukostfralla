@@ -14,12 +14,12 @@ var db = mongoose.connect('mongodb://dev:dev@ds031567.mongolab.com:31567/frukost
 console.log('connection done')
 
 var UserSchema = new Schema({
-    firstname  :  { type: String, default: 'hahaha' }
-    ,lastname  :  { type: String, default: 'hahaha' }
-    ,age  :  { type: String, default: 'hahaha' }
-    ,marriage_status:  { type: String, default: 'hahaha' }
-    ,details:  { type: String, default: 'hahaha' }
-    ,remark  :  { type: String, default: 'hahaha' }
+    firstname  :  { type: String, default: '' }
+    ,lastname  :  { type: String, default: '' }
+    ,address  :  { type: String, default: '' }
+    ,city  :  { type: String, default: '' }
+    ,postalcode  :  { type: String, default: '' }
+    ,email  :  { type: String, default: '' }
 });
 
 
@@ -63,34 +63,42 @@ app.get('/', function (req, res) {
 
 /* -- Members -- */
 
-app.get('/members', function (req, res) {
-   var responseString = ""
-    User.find({}, function (err, docs) {
-        docs.forEach(function (doc){
-		    responseString += " " + doc.firstname + " "+ doc.lastname+"<br/>"
-        });
-        res.send(responseString);
+app.get('/members', function (req, res){
+	User.find({}, function (err, docs) {
+		var members = docs
+		res.render("members/list", {
+    		locals: {
+      		  members: members
+    		}
+			}
+		);
 	});
-    
 });
 
-app.get('/members/add', function (req, res) {
-    var record = new User();
-    record.firstname = 'Nisse';
-		record.lastname = req.query.lastname
-    record.age = '44';
-    record.marriage_status = 'gift';
-    record.details = 'Inte mycket';
-    record.remarks = 'Fyller snart 45';
+/* Användar formulär*/
+app.get('/members/new', function (req, res) {
+	res.render('members/new', {
+    title: 'Register user'
+  });
+});
+
+/* Spara användare*/
+app.post('/members/new', function (req, res) {
+  var record = new User();
+		member = req.body.member
+  	record.firstname = member.firstname;
+		record.lastname = member.lastname;
+		record.address = member.address;
+		record.postalcode = member.postalcode;
+		record.city = member.city;
+		record.email = member.email
     record.save(function(err, record) {
         if (err) {
     		throw err;
     	}
-        res.send("Sparad");
+				res.redirect('/members');
     }); 
 });
-
-
 
 
 /* START */
@@ -99,3 +107,4 @@ var port = process.env.PORT || 3000;
 app.listen(port, function() {
   console.log("Listening on " + port);
 });
+
